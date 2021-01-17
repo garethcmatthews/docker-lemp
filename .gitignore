@@ -1,0 +1,2 @@
+docker/tmp/data/*
+docker/tmp/logs/*

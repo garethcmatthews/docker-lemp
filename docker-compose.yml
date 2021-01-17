@@ -1,0 +1,70 @@
+version: "3.8"
+networks:
+    frontend:
+        driver: bridge
+        internal: false
+    backend:
+        driver: bridge
+        internal: true
+services:
+    mysql:
+        container_name: ${COMPOSE_PROJECT_NAME}-mysql
+        environment:
+            MYSQL_USER: "${MYSQL_USER}"
+            MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+            MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+        healthcheck:
+            test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+            timeout: 30s
+            interval: 10s
+            retries: 10
+        image: mysql:8.0.22
+        networks:
+            - backend
+        ports:
+            - 127.0.0.1:3306:3306
+        volumes:
+            - ./docker/tmp/data/mysql:/var/lib/mysql
+            - ./docker/setup/phpmyadmin/create_tables.sql:/docker-entrypoint-initdb.d/1.sql
+    nginx:
+        build: ./docker/setup/nginx
+        container_name: ${COMPOSE_PROJECT_NAME}-nginx
+        depends_on:
+            - php
+        networks:
+            - backend
+            - frontend
+        ports:
+            - "8080:80"
+        volumes:
+            - ./public:/var/www/public
+            - ./docker/tmp/logs/nginx:/var/log/nginx
+    php:
+        build: ./docker/setup/php
+        container_name: ${COMPOSE_PROJECT_NAME}-php
+        depends_on:
+            mysql:
+                condition: service_healthy
+        networks:
+            - backend
+        ports:
+            - 9000:9000
+        volumes:
+            - ./:/var/www
+            - ./docker/tmp/logs/php:/var/log/php
+    phpmyadmin:
+        container_name: ${COMPOSE_PROJECT_NAME}-phpmyadmin
+        depends_on:
+            mysql:
+                condition: service_healthy
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+            PMA_USER: "root"
+            PMA_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+        image: phpmyadmin:5.0.4-apache
+        networks:
+            - backend
+            - frontend
+        ports:
+            - 8888:80
