@@ -7,20 +7,9 @@ networks:
         driver: bridge
         internal: true
 services:
-    # DOCKER HUB: https://hub.docker.com/_/composer/
-    composer:
-        image: composer:2.0.8
-        container_name: ${COMPOSE_PROJECT_NAME}-composer
-        volumes:
-            - ./application-backend:/var/www/html
-        working_dir: /var/www/html
-        depends_on:
-            - php
-        networks:
-            - frontend
-
     mysql:
         # DOCKER HUB: https://hub.docker.com/_/mysql/
+        build: ./build/docker_setup/development/mysql        
         container_name: ${COMPOSE_PROJECT_NAME}-mysql
         environment:
             MYSQL_DATABASE: "${MYSQL_DATABASE}"
@@ -37,12 +26,9 @@ services:
             - backend
         ports:
             - 127.0.0.1:3306:3306
-        volumes:
-            - ./docker/tmp/data/mysql:/var/lib/mysql
-            - ./docker/setup/phpmyadmin/create_tables.sql:/docker-entrypoint-initdb.d/1.sql
     # DOCKER HUB: https://hub.docker.com/_/node
     node:
-        build: ./docker/setup/node
+        build: ./build/docker_setup/development/node
         container_name: ${COMPOSE_PROJECT_NAME}-node
         networks:
             - frontend
@@ -53,7 +39,7 @@ services:
             - /home/node/node_modules
     nginx:
         # DOCKER HUB: https://hub.docker.com/_/nginx/
-        build: ./docker/setup/nginx
+        build: ./build/docker_setup/development/nginx
         container_name: ${COMPOSE_PROJECT_NAME}-nginx
         depends_on:
             - php
@@ -64,10 +50,9 @@ services:
             - "8080:80"
         volumes:
             - ./public:/var/www/public
-            - ./docker/tmp/logs/nginx:/var/log/nginx
     php:
         # DOCKER HUB: https://hub.docker.com/_/php/
-        build: ./docker/setup/php
+        build: ./build/docker_setup/development/php
         container_name: ${COMPOSE_PROJECT_NAME}-php
         depends_on:
             mysql:
@@ -77,8 +62,7 @@ services:
         ports:
             - 9000:9000
         volumes:
-            - ./application-backend:/var/www
-            - ./docker/tmp/logs/php:/var/log/php
+            - ./public:/var/www/public
     phpmyadmin:
         # DOCKER HUB: https://hub.docker.com/_/phpmyadmin
         container_name: ${COMPOSE_PROJECT_NAME}-phpmyadmin
