@@ -8,7 +8,7 @@ A LEMP based Docker application for use in development.
 * **lempserver-composer** - composer
 * **lempserver-database** - MySQL 8
 * **lempserver-nginx** - Nginx
-* **lempserver-php** - PHP7.4, nano
+* **lempserver-php** - PHP7.4, nano, composer
 * **lempserver-phpmyadmin** - phpMyadmin
 
 ## PHP version
