@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.3
+- Updates
+    - Moved folders (again) to match other docker projects
 ## 1.2
 - Updates
     - Moved folders to match other docker projects
