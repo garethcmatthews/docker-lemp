@@ -9,7 +9,7 @@ networks:
 services:
     mysql:
         # DOCKER HUB: https://hub.docker.com/_/mysql/
-        build: ./build/docker_setup/development/mysql        
+        build: ./build/docker-lemp/development/mysql
         container_name: ${COMPOSE_PROJECT_NAME}-mysql
         environment:
             MYSQL_DATABASE: "${MYSQL_DATABASE}"
@@ -28,18 +28,18 @@ services:
             - 127.0.0.1:3306:3306
     # DOCKER HUB: https://hub.docker.com/_/node
     node:
-        build: ./build/docker_setup/development/node
+        build: ./build/docker-lemp/development/node
         container_name: ${COMPOSE_PROJECT_NAME}-node
         networks:
             - frontend
         ports:
             - 4200:4200
         volumes:
-            - ./application-frontend:/home/node
+            - ./project-frontend:/home/node
             - /home/node/node_modules
     nginx:
         # DOCKER HUB: https://hub.docker.com/_/nginx/
-        build: ./build/docker_setup/development/nginx
+        build: ./build/docker-lemp/development/nginx
         container_name: ${COMPOSE_PROJECT_NAME}-nginx
         depends_on:
             - php
@@ -49,10 +49,10 @@ services:
         ports:
             - "8080:80"
         volumes:
-            - ./public:/var/www/public
+            - ./project-backend/public:/var/www/html/public
     php:
         # DOCKER HUB: https://hub.docker.com/_/php/
-        build: ./build/docker_setup/development/php
+        build: ./build/docker-lemp/development/php
         container_name: ${COMPOSE_PROJECT_NAME}-php
         depends_on:
             mysql:
@@ -62,7 +62,7 @@ services:
         ports:
             - 9000:9000
         volumes:
-            - ./public:/var/www/public
+            - ./project-backend/public:/var/www/html/public
     phpmyadmin:
         # DOCKER HUB: https://hub.docker.com/_/phpmyadmin
         container_name: ${COMPOSE_PROJECT_NAME}-phpmyadmin

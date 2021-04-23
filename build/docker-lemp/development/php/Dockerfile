@@ -24,4 +24,4 @@ RUN cd ~ && \
 
 # Docker
 EXPOSE 9000
-WORKDIR /var/www
+WORKDIR /var/www/html
