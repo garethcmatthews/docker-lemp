@@ -1,0 +1,73 @@
+version: "3.8"
+networks:
+    frontend:
+        driver: bridge
+        internal: false
+    backend:
+        driver: bridge
+        internal: true
+services:
+    php:
+        # DOCKER HUB: https://hub.docker.com/_/php/
+        build: ./docker/development/php-8.3.2/php
+        container_name: ${COMPOSE_PROJECT_NAME}-php
+        depends_on:
+            mysql:
+                condition: service_healthy
+        networks:
+            - backend
+        ports:
+            - 9000:9000
+        volumes:
+            - ./:/var/www/html
+            - /var/www/html/vendor
+    nginx:
+        # DOCKER HUB: https://hub.docker.com/_/nginx/
+        build: ./docker/development/php-8.3.2/nginx
+        container_name: ${COMPOSE_PROJECT_NAME}-nginx
+        depends_on:
+            - php
+        networks:
+            - backend
+            - frontend
+        ports:
+            - "8080:80"
+        volumes:
+            - ./:/var/www/html
+            - /var/www/html/vendor
+    mysql:
+        # DOCKER HUB: https://hub.docker.com/_/mysql/
+        build: ./docker/development/php-8.3.2/mysql
+        container_name: ${COMPOSE_PROJECT_NAME}-mysql
+        environment:
+            MYSQL_DATABASE: "${MYSQL_DATABASE}"
+            MYSQL_USER: "${MYSQL_USER}"
+            MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+            MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+        healthcheck:
+            test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+            timeout: 30s
+            interval: 10s
+            retries: 10
+        command: --default-authentication-plugin=mysql_native_password
+        networks:
+            - backend
+        ports:
+            - 3306:3306
+    phpmyadmin:
+        # DOCKER HUB: https://hub.docker.com/_/phpmyadmin
+        container_name: ${COMPOSE_PROJECT_NAME}-phpmyadmin
+        depends_on:
+            mysql:
+                condition: service_healthy
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+            PMA_USER: "root"
+            PMA_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+        image: phpmyadmin:5.2.1-apache
+        networks:
+            - backend
+            - frontend
+        ports:
+            - 8888:80

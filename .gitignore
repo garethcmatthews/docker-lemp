@@ -1,2 +1,3 @@
-docker/tmp/data/*
-docker/tmp/logs/*
+/.env
+/docker-compose.yaml
+vendor/**

@@ -1,4 +1,5 @@
-FROM nginx:1.19.2
+# DOCKER HUB: https://hub.docker.com/_/nginx/
+FROM nginx:1.25.3
 
 # System
 RUN apt-get update && \
@@ -6,3 +7,7 @@ RUN apt-get update && \
 
 # Nginx
 COPY ./default.conf /etc/nginx/conf.d
+
+# Docker
+EXPOSE 8080
+WORKDIR /var/www/html
