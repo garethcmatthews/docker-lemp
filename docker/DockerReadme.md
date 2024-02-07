@@ -1,7 +1,7 @@
 
-# LAMP Docker Application
+# LEMP Docker Application
 
-A LAMP based Docker application for use in development.
+A LEMP based Docker application for use in development.
 
 ### Containers
 > **lemp-nginx** - Nginx  
