@@ -12,4 +12,4 @@ A LEMP based Docker application for use in development.
 > PHP 7.4.33  
 > PHP 8.0.30, 8.1.27, 8.2.15, PHP 8.3.2
 
-[Documentation](./docker/DockerReadme.md) 
+[Documentation](./resources/docker/DockerReadme.md) 

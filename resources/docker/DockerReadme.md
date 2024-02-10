@@ -14,11 +14,11 @@ A LEMP based Docker application for use in development.
 > PHP 8.0.30, 8.1.27, 8.2.15, PHP 8.3.2
 
 ### Required files
-Copy both the files '.env' and 'docker-compose.yaml' from the required PHP versions folder to the project root.
+Copy the files 'docker.env' and 'docker-compose.yaml' from the required PHP versions folder to the project root.
 
 > Example  
-> Copy ./docker/development/php-8.3.2/.env to ./  
-> Copy ./docker/development/php-8.3.2/docker-compose.yaml to ./
+> Copy ./resources/docker/development/php-8.3.2/docker.env to ./  
+> Copy ./resources/docker/development/php-8.3.2/docker-compose.yaml to ./
 
 ### Running Docker
 

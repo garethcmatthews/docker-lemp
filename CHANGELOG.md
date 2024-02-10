@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.5
+- Updates
+    - Moved docker files to resources/docker folder
+    - Updated DockerReadme.md
 ## 1.4
 - Updates
     - Reorganised project folders

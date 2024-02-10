@@ -9,13 +9,15 @@ networks:
 services:
     php:
         # DOCKER HUB: https://hub.docker.com/_/php/
-        build: ./docker/development/php-8.2.15/php
-        container_name: ${COMPOSE_PROJECT_NAME}-php
+        build: ./resources/docker/development/php-8.0.30/php
+        container_name: lemp-php
         depends_on:
             mysql:
                 condition: service_healthy
         networks:
             - backend
+        env_file:
+            - 'docker.env'
         ports:
             - 9000:9000
         volumes:
@@ -23,10 +25,12 @@ services:
             - /var/www/html/vendor
     nginx:
         # DOCKER HUB: https://hub.docker.com/_/nginx/
-        build: ./docker/development/php-8.2.15/nginx
-        container_name: ${COMPOSE_PROJECT_NAME}-nginx
+        build: ./resources/docker/development/php-8.0.30/nginx
+        container_name: lemp-nginx
         depends_on:
             - php
+        env_file:
+            - 'docker.env'
         networks:
             - backend
             - frontend
@@ -37,13 +41,10 @@ services:
             - /var/www/html/vendor
     mysql:
         # DOCKER HUB: https://hub.docker.com/_/mysql/
-        build: ./docker/development/php-8.2.15/mysql
-        container_name: ${COMPOSE_PROJECT_NAME}-mysql
-        environment:
-            MYSQL_DATABASE: "${MYSQL_DATABASE}"
-            MYSQL_USER: "${MYSQL_USER}"
-            MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
-            MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+        build: ./resources/docker/development/php-8.0.30/mysql
+        container_name: lemp-mysql
+        env_file:
+            - 'docker.env'
         healthcheck:
             test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
             timeout: 30s
@@ -56,15 +57,12 @@ services:
             - 3306:3306
     phpmyadmin:
         # DOCKER HUB: https://hub.docker.com/_/phpmyadmin
-        container_name: ${COMPOSE_PROJECT_NAME}-phpmyadmin
+        container_name: lemp-phpmyadmin
         depends_on:
             mysql:
                 condition: service_healthy
-        environment:
-            PMA_HOST: mysql
-            PMA_PORT: 3306
-            PMA_USER: "root"
-            PMA_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+        env_file:
+            - 'docker.env'
         image: phpmyadmin:5.2.1-apache
         networks:
             - backend
