@@ -4,7 +4,7 @@
 A LEMP based Docker application for use in development.
 
 ### Containers
-> **lemp-nginx** - Nginx  
+> **lemp-nginx**: Nginx  
 > **lemp-php**: PHP, curl, nano, composer  
 > **lemp-mysql**: MySQL 8  
 > **lemp-phpmyadmin**: phpMyadmin  
@@ -20,12 +20,12 @@ Copy the files 'docker.env' and 'docker-compose.yaml' from the required PHP vers
 > Copy ./resources/docker/development/php-8.3.2/docker.env to ./  
 > Copy ./resources/docker/development/php-8.3.2/docker-compose.yaml to ./
 
-### Running Docker
+### Docker
 
 #### Run Docker
 > docker compose up -d
 
-#### To Rebuild containers after any config changes
+#### Rebuild containers after any config changes
 > docker compose up -d --build 
 
 #### Access NGINX box...
@@ -36,3 +36,9 @@ Copy the files 'docker.env' and 'docker-compose.yaml' from the required PHP vers
 > docker exec -it lemp-mysql /bin/bash  
 #### Access PHPMyAdmin box...
 > docker exec -it lemp-phpmyadmin /bin/bash 
+
+#### Browser
+> http://localhost:8080
+
+#### PHPmyadmin
+> http://localhost:8888
