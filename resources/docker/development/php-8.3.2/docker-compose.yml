@@ -17,9 +17,7 @@ services:
         networks:
             - backend
         env_file:
-            - 'docker.env'
-        ports:
-            - 9000:9000
+            - docker.env
         volumes:
             - ./:/var/www/html
             - /var/www/html/vendor
@@ -30,12 +28,12 @@ services:
         depends_on:
             - php
         env_file:
-            - 'docker.env'
+            - docker.env
         networks:
             - backend
             - frontend
         ports:
-            - "8080:80"
+            - 8080:80
         volumes:
             - ./:/var/www/html
             - /var/www/html/vendor
@@ -44,7 +42,7 @@ services:
         build: ./resources/docker/development/php-8.3.2/mysql
         container_name: lemp-mysql
         env_file:
-            - 'docker.env'
+            - docker.env
         healthcheck:
             test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
             timeout: 30s
@@ -62,7 +60,7 @@ services:
             mysql:
                 condition: service_healthy
         env_file:
-            - 'docker.env'
+            - docker.env
         image: phpmyadmin:5.2.1-apache
         networks:
             - backend

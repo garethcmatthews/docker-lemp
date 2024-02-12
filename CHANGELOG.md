@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.5.1
+- Created php-dual configuration
+- Updated DockerReadme.md
+
 ## 1.5
 - Moved docker files to resources/docker folder
 - Updated DockerReadme.md

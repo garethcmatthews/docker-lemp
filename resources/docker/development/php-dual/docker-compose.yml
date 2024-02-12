@@ -7,10 +7,24 @@ networks:
         driver: bridge
         internal: true
 services:
-    php:
+    php7:
         # DOCKER HUB: https://hub.docker.com/_/php/
         build: ./resources/docker/development/php-7.4.33/php
-        container_name: lemp-php
+        container_name: lemp-php7
+        depends_on:
+            mysql:
+                condition: service_healthy
+        networks:
+            - backend
+        env_file:
+            - docker.env
+        volumes:
+            - ./:/var/www/html
+            - /var/www/html/vendor
+    php8:
+        # DOCKER HUB: https://hub.docker.com/_/php/
+        build: ./resources/docker/development/php-8.3.2/php
+        container_name: lemp-php8
         depends_on:
             mysql:
                 condition: service_healthy
@@ -23,10 +37,11 @@ services:
             - /var/www/html/vendor
     nginx:
         # DOCKER HUB: https://hub.docker.com/_/nginx/
-        build: ./resources/docker/development/php-7.4.33/nginx
+        build: ./resources/docker/development/php-dual/nginx
         container_name: lemp-nginx
         depends_on:
-            - php
+            - php7
+            - php8
         env_file:
             - docker.env
         networks:
@@ -34,6 +49,7 @@ services:
             - frontend
         ports:
             - 8080:80
+            - 8088:88
         volumes:
             - ./:/var/www/html
             - /var/www/html/vendor

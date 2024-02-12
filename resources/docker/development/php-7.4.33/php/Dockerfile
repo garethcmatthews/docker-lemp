@@ -17,7 +17,8 @@ RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini && \
     sed -i "s|^;date.timezone =.*$|date.timezone = Europe/London|" /usr/local/etc/php/php.ini && \
     sed -i "s|display_startup_errors =.*$|display_startup_errors = On|" /usr/local/etc/php/php.ini && \
     sed -i "s|display_errors =.*$|display_errors = On|" /usr/local/etc/php/php.ini && \
-    sed -i "s|^;error_log =.*$|error_log = /var/log/php/php-error.log|" /usr/local/etc/php/php.ini
+    sed -i "s|^;error_log =.*$|error_log = /var/log/php/php-error.log|" /usr/local/etc/php/php.ini && \
+    sed -i 's/listen = 9000/listen = 9007/' /usr/local/etc/php-fpm.d/zz-docker.conf
 
 # Composer - move this!!
 RUN cd ~ && \
@@ -25,5 +26,5 @@ RUN cd ~ && \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 # Docker
-EXPOSE 9000
+EXPOSE 9007
 WORKDIR /var/www/html
